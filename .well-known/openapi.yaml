@@ -1,0 +1,188 @@
+openapi: 3.1.0
+info:
+  title: Ransomware Live Monitor Plugin
+  description: Plugin che interroga le API di ransomware.live per ottenere informazioni complete sulle vittime ransomware, includendo dettagli, funzionalità di ricerca e statistiche aggregate.
+  version: "2.0.0"
+
+servers:
+  - url: "https://api.ransomware.live/"
+    description: "Server principale dell'API di ransomware.live"
+
+paths:
+  /v2/recentvictims:
+    get:
+      operationId: getRecentVictims
+      summary: Ottiene l’elenco delle vittime recenti
+      description: Restituisce un array di oggetti contenenti le informazioni di base e, grazie a `additionalProperties: true`, eventuali campi extra forniti dall’API.
+      parameters:
+        - name: limit
+          in: query
+          description: Numero massimo di voci da restituire.
+          required: false
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          description: Offset per la paginazione.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Array di vittime recenti.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: ID univoco della vittima.
+                    name:
+                      type: string
+                      description: Nome della vittima.
+                    published:
+                      type: string
+                      format: date-time
+                      description: Data e ora di pubblicazione.
+                    link:
+                      type: string
+                      description: Link con ulteriori informazioni.
+                    gang:
+                      type: string
+                      description: Nome del gruppo ransomware.
+                    first_seen:
+                      type: string
+                      format: date-time
+                      description: Data e ora del primo rilevamento.
+                  additionalProperties: true
+        '400':
+          description: Richiesta errata
+        '500':
+          description: Errore interno del server
+
+  /v2/victim/{id}:
+    get:
+      operationId: getVictimById
+      summary: Ottiene i dettagli di una vittima specifica
+      description: Restituisce le informazioni complete di una vittima identificata da un ID univoco.
+      parameters:
+        - name: id
+          in: path
+          description: ID univoco della vittima.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Dettagli della vittima.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  published:
+                    type: string
+                    format: date-time
+                  link:
+                    type: string
+                  gang:
+                    type: string
+                  details:
+                    type: object
+                    description: Informazioni aggiuntive e specifiche della vittima.
+                    additionalProperties: true
+        '404':
+          description: Vittima non trovata
+        '500':
+          description: Errore interno del server
+
+  /v2/search:
+    get:
+      operationId: searchVictims
+      summary: Cerca vittime in base a criteri specifici
+      description: Permette di cercare vittime tramite parametri come nome, gang, o intervallo temporale.
+      parameters:
+        - name: query
+          in: query
+          description: Termini di ricerca (es. nome, parte del nome o gruppo ransomware).
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Numero massimo di risultati.
+          required: false
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          description: Offset per la paginazione.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Array di vittime che corrispondono ai criteri di ricerca.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    published:
+                      type: string
+                      format: date-time
+                    link:
+                      type: string
+                    gang:
+                      type: string
+                  additionalProperties: true
+        '400':
+          description: Richiesta errata
+        '500':
+          description: Errore interno del server
+
+  /v2/statistics:
+    get:
+      operationId: getStatistics
+      summary: Ottiene statistiche aggregate sulle vittime
+      description: Restituisce dati statistici aggregati, come il numero totale di vittime, la distribuzione per gruppi ransomware e trend temporali.
+      responses:
+        '200':
+          description: Dati statistici aggregati.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_victims:
+                    type: integer
+                    description: Numero totale di vittime registrate.
+                  gangs:
+                    type: array
+                    description: Lista dei gruppi ransomware e il numero di vittime associato.
+                    items:
+                      type: object
+                      properties:
+                        gang:
+                          type: string
+                        count:
+                          type: integer
+                  trends:
+                    type: object
+                    description: Dati relativi ai trend temporali (es. vittime per mese).
+                    additionalProperties: true
+        '500':
+          description: Errore interno del server
