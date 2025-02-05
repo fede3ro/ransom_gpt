@@ -9,7 +9,7 @@
   },
   "api": {
     "type": "openapi",
-    "url": "https://tuo-dominio.com/.well-known/openapi.yaml",
+    "url": "https://fede3ro.github.io/.well-known/openapi.yaml",
     "is_user_authenticated": false
   },
   "logo_url": "https://tuo-dominio.com/logo.png",
