@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.1.0
 info:
   title: Ransomware Live Monitor Plugin
   description: Plugin che interroga le API di ransomware.live per ottenere l’elenco completo delle vittime, raccogliendo tutte le informazioni disponibili per ogni evento.
