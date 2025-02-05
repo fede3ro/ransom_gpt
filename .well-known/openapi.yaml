@@ -1,19 +1,17 @@
 openapi: 3.1.0
 info:
   title: Ransomware Live Monitor Plugin
-  description: Plugin che interroga le API di ransomware.live per ottenere informazioni complete sulle vittime ransomware, includendo dettagli, funzionalità di ricerca e statistiche aggregate.
+  description: Plugin che interroga le API di ransomware.live per ottenere informazioni complete sulle vittime.
   version: "2.0.0"
-
 servers:
   - url: "https://api.ransomware.live/"
     description: "Server principale dell'API di ransomware.live"
-
 paths:
   /v2/recentvictims:
     get:
       operationId: getRecentVictims
-      summary: Ottiene l’elenco delle vittime recenti
-      description: Restituisce un array di oggetti contenenti le informazioni di base e, grazie a `additionalProperties: true`, eventuali campi extra forniti dall’API.
+      summary: Ottiene l'elenco delle vittime recenti
+      description: Restituisce un array di oggetti contenenti le informazioni di base e altri eventuali campi.
       parameters:
         - name: limit
           in: query
@@ -59,7 +57,7 @@ paths:
                       description: Data e ora del primo rilevamento.
                   additionalProperties: true
         '400':
-          description: Richiesta errata
+          description: Richiesta errata.
         '500':
           description: Errore interno del server
 
@@ -67,7 +65,7 @@ paths:
     get:
       operationId: getVictimById
       summary: Ottiene i dettagli di una vittima specifica
-      description: Restituisce le informazioni complete di una vittima identificata da un ID univoco.
+      description: Restituisce le informazioni complete per una vittima identificata dall'ID.
       parameters:
         - name: id
           in: path
@@ -96,10 +94,10 @@ paths:
                     type: string
                   details:
                     type: object
-                    description: Informazioni aggiuntive e specifiche della vittima.
+                    description: Informazioni aggiuntive sulla vittima.
                     additionalProperties: true
         '404':
-          description: Vittima non trovata
+          description: Vittima non trovata.
         '500':
           description: Errore interno del server
 
@@ -107,11 +105,11 @@ paths:
     get:
       operationId: searchVictims
       summary: Cerca vittime in base a criteri specifici
-      description: Permette di cercare vittime tramite parametri come nome, gang, o intervallo temporale.
+      description: Permette di cercare vittime tramite parametri come nome, gruppo o altri termini.
       parameters:
         - name: query
           in: query
-          description: Termini di ricerca (es. nome, parte del nome o gruppo ransomware).
+          description: Termini di ricerca.
           required: true
           schema:
             type: string
@@ -150,7 +148,7 @@ paths:
                       type: string
                   additionalProperties: true
         '400':
-          description: Richiesta errata
+          description: Richiesta errata.
         '500':
           description: Errore interno del server
 
@@ -158,7 +156,7 @@ paths:
     get:
       operationId: getStatistics
       summary: Ottiene statistiche aggregate sulle vittime
-      description: Restituisce dati statistici aggregati, come il numero totale di vittime, la distribuzione per gruppi ransomware e trend temporali.
+      description: Restituisce dati statistici aggregati, come il numero totale di vittime e la distribuzione per gruppi.
       responses:
         '200':
           description: Dati statistici aggregati.
@@ -172,7 +170,7 @@ paths:
                     description: Numero totale di vittime registrate.
                   gangs:
                     type: array
-                    description: Lista dei gruppi ransomware e il numero di vittime associato.
+                    description: Lista dei gruppi ransomware con il numero di vittime.
                     items:
                       type: object
                       properties:
@@ -182,7 +180,7 @@ paths:
                           type: integer
                   trends:
                     type: object
-                    description: Dati relativi ai trend temporali (es. vittime per mese).
+                    description: Trend temporali delle vittime.
                     additionalProperties: true
         '500':
           description: Errore interno del server
