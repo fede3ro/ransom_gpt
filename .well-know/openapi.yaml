@@ -1,0 +1,60 @@
+openapi: 3.0.1
+info:
+  title: Ransomware Live Monitor Plugin
+  description: Plugin che interroga le API di ransomware.live per ottenere l’elenco completo delle vittime, raccogliendo tutte le informazioni disponibili per ogni evento.
+  version: "1.0.0"
+
+servers:
+  - url: https://api.ransomware.live
+
+paths:
+  /v2/recentvictims:
+    get:
+      operationId: getRecentVictims
+      summary: Ottiene l’elenco completo delle vittime registrate da ransomware.live
+      description: Restituisce un array di oggetti, ciascuno contenente le informazioni relative a una vittima. Verranno restituiti tutti i campi forniti dall’API.
+      parameters:
+        - name: limit
+          in: query
+          description: Numero massimo di voci da restituire.
+          required: false
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          description: Offset iniziale per la paginazione.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Array di vittime con tutte le informazioni disponibili.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: Nome della vittima (se presente).
+                    published:
+                      type: string
+                      format: date-time
+                      description: Data e ora di pubblicazione dell’evento.
+                    link:
+                      type: string
+                      description: URL con ulteriori informazioni relative alla vittima.
+                    gang:
+                      type: string
+                      description: Nome del gruppo ransomware associato.
+                    first_seen:
+                      type: string
+                      format: date-time
+                      description: Data e ora in cui la vittima è stata individuata per la prima volta.
+                  additionalProperties: true
+        '400':
+          description: Richiesta errata
+        '500':
+          description: Errore interno del server
