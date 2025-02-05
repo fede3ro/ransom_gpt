@@ -1,0 +1,18 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Ransomware Live Monitor",
+  "name_for_model": "ransomware_live_monitor",
+  "description_for_human": "Monitora le vittime più recenti registrate su ransomware.live, raccogliendo tutte le informazioni disponibili per ogni evento.",
+  "description_for_model": "Plugin che interroga le API pubbliche di ransomware.live per ottenere l’elenco completo delle vittime, includendo tutte le proprietà presenti nella risposta JSON.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://fede3ro.github.io/ransom_gpt/.well-known/openapi.yaml",
+    "is_user_authenticated": false
+  },
+  "logo_url": "https://tuo-dominio.com/logo.png",
+  "contact_email": "support@tuo-dominio.com",
+  "legal_info_url": "https://tuo-dominio.com/terms"
+}
